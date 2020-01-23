@@ -5,9 +5,12 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { FormDefinition, FormQuestion } from './form-definition.model';
+import { FormDefinition } from './form-definition.model';
 import { FormDefinitionBuilder } from './form-definition.builder';
-import { FormQuestionBuilder } from './form-question.builder';
+import {
+  FormSubmission,
+  FormSubmissionQuestion
+} from '../form-submission/form-submission.model';
 
 @Injectable()
 export class FormDefinitionService {
@@ -87,5 +90,36 @@ export class FormDefinitionService {
     return formDefinition;
   }
 
-  public async checkValidQuestions(questions: FormDefinition[]) {}
+  public async checkValidQuestions({
+    serviceKey,
+    questions
+  }: {
+    serviceKey: string;
+    questions: FormSubmissionQuestion[];
+  }) {
+    const formDefinition = await this.findOne(serviceKey);
+    const rules = formDefinition.questions.filter(
+      question => question.validation.required || question.validation.maxLength
+    );
+
+    rules.forEach(rule => {
+      if (rule.validation.required) {
+        if (!questions.find(question => question.questionKey === rule.key)) {
+          throw new BadRequestException(`${rule.key} is required`);
+        }
+      }
+      if (rule.validation.maxLength) {
+        questions.forEach(question => {
+          if (
+            typeof question.value !== 'string' ||
+            question.value.length > rule.maxLength
+          ) {
+            throw new BadRequestException(
+              `${question.questionKey} is too long`
+            );
+          }
+        });
+      }
+    });
+  }
 }

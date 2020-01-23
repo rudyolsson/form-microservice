@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import { FormSubmissionBuilder } from './form-submission.builder';
-import { FormDefinition } from '../form-definition/form-definition.model';
+import { FormQuestion } from '../form-definition/form-definition.model';
 
 export const FormSubmissionModelSchema = new mongoose.Schema({
   key: { type: String, required: true },
@@ -17,7 +17,7 @@ export class FormSubmission {
   name: string;
   date: Date;
   serviceKey: string;
-  questions: FormDefinition[];
+  questions: FormSubmissionQuestion[];
   dateCreated: Date;
 
   constructor(formSubmissionBuilder: FormSubmissionBuilder) {
@@ -30,4 +30,9 @@ export class FormSubmission {
       this.dateCreated = formSubmissionBuilder.dateCreated;
     }
   }
+}
+
+export interface FormSubmissionQuestion {
+  questionKey: string;
+  value: any;
 }

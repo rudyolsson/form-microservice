@@ -1,12 +1,14 @@
-import { FormDefinition } from '../form-definition/form-definition.model';
-import { FormSubmission } from './form-submission.model';
+import {
+  FormSubmission,
+  FormSubmissionQuestion
+} from './form-submission.model';
 
 export class FormSubmissionBuilder {
   private _key: string;
   private _name: string;
   private _date: Date;
   private _serviceKey: string;
-  private _questions: FormDefinition[];
+  private _questions: FormSubmissionQuestion[];
   private _dateCreated: Date;
 
   constructor() {}
@@ -31,7 +33,7 @@ export class FormSubmissionBuilder {
     return this._serviceKey;
   }
 
-  public get questions(): FormDefinition[] {
+  public get questions(): FormSubmissionQuestion[] {
     return this._questions;
   }
 
@@ -59,7 +61,7 @@ export class FormSubmissionBuilder {
     return this;
   }
 
-  public setQuestions(value: FormDefinition[]): FormSubmissionBuilder {
+  public setQuestions(value: FormSubmissionQuestion[]): FormSubmissionBuilder {
     this._questions = value;
     return this;
   }

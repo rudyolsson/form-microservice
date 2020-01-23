@@ -27,7 +27,10 @@ export class FormSubmissionService {
       dateCreated
     } = formSubmission;
 
-    await this.formDefinitionService.checkValidQuestions(questions);
+    await this.formDefinitionService.checkValidQuestions({
+      serviceKey,
+      questions
+    });
 
     const formSubmissionToInsert: FormSubmission = await new FormSubmissionBuilder()
       .setKey(key)
