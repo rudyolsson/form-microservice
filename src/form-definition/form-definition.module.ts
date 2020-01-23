@@ -11,6 +11,7 @@ import { FormDefinitionModelSchema } from './form-definition.model';
     ])
   ],
   controllers: [FormDefinitionController],
-  providers: [FormDefinitionService]
+  providers: [FormDefinitionService],
+  exports: [FormDefinitionService]
 })
 export class FormDefinitionModule {}

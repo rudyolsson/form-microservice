@@ -5,8 +5,9 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { FormDefinition } from './form-definition.model';
+import { FormDefinition, FormQuestion } from './form-definition.model';
 import { FormDefinitionBuilder } from './form-definition.builder';
+import { FormQuestionBuilder } from './form-question.builder';
 
 @Injectable()
 export class FormDefinitionService {
@@ -16,24 +17,11 @@ export class FormDefinitionService {
   ) {}
 
   async insert(formDefinition: FormDefinition): Promise<Model<FormDefinition>> {
-    const {
-      service,
-      key,
-      type,
-      title,
-      placeholder,
-      validation,
-      options
-    } = formDefinition;
+    const { service, questions } = formDefinition;
 
     const formDefinitionToInsert: FormDefinition = await new FormDefinitionBuilder()
       .setService(service)
-      .setKey(key)
-      .setType(type)
-      .setTitle(title)
-      .setPlaceholder(placeholder)
-      .setValidation(validation)
-      .setOptions(options)
+      .setQuestions(questions)
       .setDateCreated(new Date())
       .build();
 
@@ -98,4 +86,6 @@ export class FormDefinitionService {
     }
     return formDefinition;
   }
+
+  public async checkValidQuestions(questions: FormDefinition[]) {}
 }
